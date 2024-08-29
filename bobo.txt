@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-I am popo
-=======
-I am bobo
->>>>>>> master
