@@ -1,8 +1,6 @@
 import os
 import random
-import segment
 from segment import dirinfo, imginfo, Segment
-import pillow
 import pathlib
 from present import present_img
 from psychopy import visual
@@ -11,6 +9,12 @@ import psychopy.gui as psygui
 
 
 def pres_assign(imgdir):
+
+    "Assigns each image in a directory to 'Mass' or 'Spaced'. Randomly done"
+    "imgdir: directory of images to assign"
+
+    #Create dictionary to store images in their sections (directory name/spaced or mass)
+
     dict = {}
     for val in os.listdir(imgdir):
         imgdirs = os.listdir(os.path.join(imgdir, val))
@@ -28,7 +32,12 @@ def pres_assign(imgdir):
     return(dict)
 
 def seg_assign(imgdir, m_per_seg, num_segs):
-    dict = pres_assign("ipool2")
+
+    "Assigns the segments used in experient. Each segment has m_per_seg. This is basically how many blocks there are."
+    "For example, m_per_seg = 2 means (2massNeg, 2massNeu, 2spcNeg, 2spcNeu). Num_segs is how many individual segments there are."
+    "The num_segs determines number of segments. This should mach the number of copies made for each image so spaced images are consistent."
+
+    dict = pres_assign(imgdir)
     numvars = num_segs
 
     segs = []
@@ -39,6 +48,8 @@ def seg_assign(imgdir, m_per_seg, num_segs):
     dng = dict['Negative\\mass']
     dne = dict['Neutral\\mass']
         
+    #runs through each segment, give each segment number of massed and spaced blocks needed
+
     for x in range(num_segs):
         
         for _ in range(m_per_seg):
@@ -55,11 +66,16 @@ def seg_assign(imgdir, m_per_seg, num_segs):
     return segs
 
 def present_segs(segs):
+
+    #Get participant ID
+
     participant = {"Participant #": ""}
     pnum = psygui.DlgFromDict(participant)
     win = visual.Window(size=(800, 600), units="pix", color="white")
     nsegs = list(segs)
     df = pd.DataFrame()
+
+    #Go thorugh each seg, randomly presenting blocks of each segment
 
     for i in range(len(nsegs)):
         idx = random.randint(0, len(nsegs) - 1)
@@ -79,7 +95,3 @@ def present_segs(segs):
     df.to_csv("results")
 
 
-output = pathlib.Path("ipool2")
-
-segs = seg_assign(output, 2, 4)
-present_segs(segs)
