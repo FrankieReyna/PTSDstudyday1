@@ -13,6 +13,8 @@ def present_img(win, ipath):
     "win: window to be presented to (Psychopy window)"
     "ipath: path to image"
 
+    "returns what patient entered disturbance level as, and reaction time"
+
     #Initialize sizes
 
     windowsize = win.size
@@ -26,8 +28,8 @@ def present_img(win, ipath):
     # Create a slider
     spos = pos=(ipos[0], windowsize[1] / -4.0)
     vas = Slider(win,
-                ticks=range(11),
-                labels=range(0, 11),
+                ticks=range(10),
+                labels=range(0, 10),
                 granularity=0.1,
                 color='black',
                 size=ssize, 
@@ -48,15 +50,15 @@ def present_img(win, ipath):
 
     startt = c.getTime()
 
+    instructions.draw()
+    image_stim.draw()
+    vas.draw()
+    val = vas.getMarkerPos()
+    visual.TextStim(win, text=f"{val}", pos=(spos[0] + ssize[0] / 1.75, spos[1]), color="black", font = 'arial').draw()
+
+    win.flip()
+
     while True:
-        instructions.draw()
-        image_stim.draw()
-        vas.draw()
-        val = vas.getMarkerPos()
-        visual.TextStim(win, text=f"{val}", pos=(spos[0] + ssize[0] / 1.75, spos[1]), color="black").draw()
-        
-        # Update the window
-        win.flip()
 
         #Key decisions, if key is pressed, do ting
 
