@@ -1,6 +1,5 @@
-import segassignment as exp
-import present as pres
-import pillow as pill
+import MidLevel.segassignment as exp
+import MidLevel.LowLevel.pillow as pill
 from pathlib import Path
 import os
 
@@ -14,8 +13,14 @@ if not os.path.exists(result_export_dir):
 
 #get source path
 
-source = Path("bobo").resolve()
-copydir = Path("ipool").resolve()
+source = "PracSource"
+copydir = "TransImgs"
+
+if source == copydir:
+    raise Exception("source dir should not be the same as copy dir")
+
+source = Path(source).resolve()
+copydir = Path(copydir).resolve()
 
 "number of segments determines # of copies for each image"
 
@@ -42,7 +47,7 @@ segs = exp.seg_assign(copydir, num_m_blocks, num_segs)
 
 df, participant = exp.present_segs(segs)
 
-ppath = os.path.join(result_export_dir, participant['Participant #'])
+ppath = os.path.join(result_export_dir, f"P{participant['Participant #']}")
 
 if not os.path.exists(ppath):
     os.mkdir(ppath)

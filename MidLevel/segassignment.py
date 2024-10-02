@@ -1,8 +1,7 @@
 import os
 import random
-from segment import dirinfo, imginfo, Segment
-import pathlib
-from present import present_img
+from MidLevel.segment import dirinfo, imginfo, Segment
+from MidLevel.LowLevel.present import present_img
 from psychopy import visual
 import pandas as pd
 import psychopy.gui as psygui

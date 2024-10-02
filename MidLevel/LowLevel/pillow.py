@@ -117,7 +117,7 @@ def skew(source, factor):
 def create_copies(path, output, num_copies, sfact):
 
     "Using previous methods (Skew, crop) Allows for multiple variations of imgs to be made. cropping is random"
-    "skew is determined by skew factor"
+    "skew is determined by skew factor. Takes from a source img, puts into output directiry as a dir of img vars"
     "path: Image path to be copied"
     "output: output directory path to store copies)"
     "num_copies: how many copies need to be made"
