@@ -13,6 +13,8 @@ if not os.path.exists(result_export_dir):
 
 #get source path
 
+PRACMODE = True
+
 source = "PracSource"
 copydir = "TransImgs"
 
@@ -45,7 +47,7 @@ pill.create_pool(source, copydir, num_copies, sfactor)
 
 segs = exp.seg_assign(copydir, num_m_blocks, num_segs)
 
-df, participant = exp.present_segs(segs)
+df, participant = exp.present_segs(segs, PRACMODE)
 
 ppath = os.path.join(result_export_dir, f"P{participant['Participant #']}")
 
@@ -55,7 +57,8 @@ if not os.path.exists(ppath):
 
 ppath = os.path.join(ppath, "day1")
 
-df.to_csv(ppath)
+if(not PRACMODE):
+    df.to_csv(ppath)
 
 
 

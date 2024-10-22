@@ -64,7 +64,7 @@ def seg_assign(imgdir, m_per_seg, num_segs):
 
     return segs
 
-def present_segs(segs):
+def present_segs(segs, PRACMODE):
 
     #Get participant ID
 
@@ -87,8 +87,9 @@ def present_segs(segs):
             for k in range(len(block)):
                 idx = random.randint(0, len(block) - 1)
                 img = block[idx]
-                score, rt = present_img(win, img.path)
-                df = pd.concat([df, pd.DataFrame({"partinum" : participant['Participant #'], "imgname" : img.name, "valScore" : score, "resptime" : rt, "val" : img.val, "pres" : img.pres, "path" : img.path}, index = [0])], ignore_index=True)
+                score, rt = present_img(win, img.path, PRACMODE)
+                df = pd.concat([df, pd.DataFrame({"partinum" : participant['Participant #'], "orgimg" : img.dirname, "imgname" : img.name, "valScore" : score
+                                                  ,"resptime" : rt, "val" : img.val, "pres" : img.pres, "path" : img.path}, index = [0])], ignore_index=True)
                 del block[idx]
 
     return df, participant

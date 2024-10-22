@@ -144,7 +144,6 @@ def create_copies(path, output, num_copies, sfact):
 
     for x in range(0, num_copies):
         nname = os.path.join(file + f"{x}" + ext)
-        print(x)
         img = crop_vars(path, 500, 500)
         skew(path, sfact).save(os.path.join(output, nname))
 

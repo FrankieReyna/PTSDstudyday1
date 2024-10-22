@@ -7,7 +7,7 @@ import os
 import pandas
 from psychopy.clock import Clock
 
-def present_img(win, ipath):
+def present_img(win, ipath, PRACMODE):
 
     "Part of Day 1 experiment. Presents image path passed to window passed"
     "win: window to be presented to (Psychopy window)"
@@ -45,6 +45,20 @@ def present_img(win, ipath):
 
     #create image
     image_stim = visual.ImageStim(win, image=img, pos=ipos, size=isize)
+
+    if(PRACMODE):
+        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5)
+                                   , color="black", font='arial')
+        PRACMODE.draw()
+        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5 - 800)
+                                   , color="black", font='arial')
+        PRACMODE.draw()
+        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(800, ipos[1] + isize[1] / 1.5)
+                                   , color="black", font='arial')
+        PRACMODE.draw()
+        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(800, ipos[1] + isize[1] / 1.5 - 800)
+                                   , color="black", font='arial')
+        PRACMODE.draw()
 
     c = Clock()
 

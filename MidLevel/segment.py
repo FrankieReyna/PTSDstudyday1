@@ -13,7 +13,7 @@ from collections import namedtuple
 #image dir is ipool
 
 dirinfo = namedtuple('dirinfo', ['name', 'val', 'pres', 'path'])
-imginfo = namedtuple('imginfo', ['name', 'val', 'pres', 'path'])
+imginfo = namedtuple('imginfo', ['dirname', 'name', 'val', 'pres', 'path'])
 
 
 
@@ -30,17 +30,18 @@ class Segment():
     def add_mblock(self, dictinfo):
         m_block = []
         imgs = os.listdir(dictinfo.path)
+        print(dictinfo.name)
         if self.req_same_num and self.num_vars != len(imgs):
             raise RuntimeError(f"The # of images in {dictinfo.name} ({len(imgs)}) does not match num_vars for segment ({self.num_vars})")
         for img in imgs:
-            imgentry = imginfo(img, dictinfo.val, dictinfo.pres, os.path.join(dictinfo.path, img))
+            imgentry = imginfo(dictinfo.name, img, dictinfo.val, dictinfo.pres, os.path.join(dictinfo.path, img))
             m_block.append(imgentry)
         self.IMGS.append(m_block)
 
     def add_sblock(self, dictinfo, idx_var):
         s_block = []
         img = os.listdir(dictinfo.path)[idx_var]
-        imgentry = imginfo(img, dictinfo.val, dictinfo.pres, os.path.join(dictinfo.path, img))
+        imgentry = imginfo(dictinfo.name, img, dictinfo.val, dictinfo.pres, os.path.join(dictinfo.path, img))
         s_block.append(imgentry)
         self.IMGS.append(s_block)
 
