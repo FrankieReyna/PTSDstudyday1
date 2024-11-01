@@ -2,20 +2,24 @@ import MidLevel.segassignment as exp
 import MidLevel.LowLevel.pillow as pill
 from pathlib import Path
 import os
+from psychopy import visual
+from MidLevel.LowLevel.present import present_instruction, present_img
+import psychopy.gui as psygui
 
 "Create pool of images, making copies of images put into source"
 
 
-result_export_dir = Path(r"C:\Users\Frankie\Documents\PTSDpsycho\results").resolve()
+result_export_dir = Path(r"results").resolve()
 
 if not os.path.exists(result_export_dir):
     raise Exception("Results directory DNE")
 
 #get source path
 
-PRACMODE = True
+PRACMODE = False 
 
-source = "PracSource"
+source = "MainSource"
+pracsource = "PracSource"
 copydir = "TransImgs"
 
 if source == copydir:
@@ -26,9 +30,13 @@ copydir = Path(copydir).resolve()
 
 "number of segments determines # of copies for each image"
 
-num_imgs_per_val = 2
 
-num_segs = 1
+#number of images in each group (16Neg, 16Neu) = 16
+num_imgs_per_val = 4
+
+segfillers = 1
+
+num_segs = 4
 num_copies = num_segs
 
 num_m_blocks = int(num_imgs_per_val / num_segs / 2)
@@ -45,20 +53,42 @@ if not os.path.exists(copydir):
 
 pill.create_pool(source, copydir, num_copies, sfactor)
 
-segs = exp.seg_assign(copydir, num_m_blocks, num_segs)
+participant_pres, segs = exp.seg_assign(copydir, num_m_blocks, num_segs)
 
-df, participant = exp.present_segs(segs, PRACMODE)
+participant = {"Participant #": ""}
+pnum = psygui.DlgFromDict(participant)
+partnum = participant['Participant #']
 
-ppath = os.path.join(result_export_dir, f"P{participant['Participant #']}")
+#First set of instructions
+win = visual.Window(fullscr=True, units="pix", color="white")
+present_instruction(win, r'Ver2__PTSD_pilot_text\begininstr1.jpg')
+present_instruction(win, r'Ver2__PTSD_pilot_text\begininstr2.jpg')
+present_instruction(win, r'Ver2__PTSD_pilot_text\prac1.jpg')
+#Practice
+
+for img in os.listdir(pracsource): 
+    present_img(win, os.path.join(pracsource, img), True)
+
+present_instruction(win, r'Ver2__PTSD_pilot_text\prac2.jpg')
+
+#Main stuff
+
+data = exp.present_segs(win, segs, segfillers, partnum, PRACMODE, BREAK=True, SEGSPERBREAK=1, BREAKSLIDEPATH=r'Ver2__PTSD_pilot_text\break.jpg')
+
+present_instruction(win, r'Ver2__PTSD_pilot_text\expend.jpg')
+
+ppath = os.path.join(result_export_dir, f"P{partnum}")
+print(ppath)
 
 if not os.path.exists(ppath):
     os.mkdir(ppath)
     print(ppath)
 
-ppath = os.path.join(ppath, "day1")
-
+print("pa")
 if(not PRACMODE):
-    df.to_csv(ppath)
+    print("ma")
+    data.to_csv(os.path.join(ppath, "day1"))
+    participant_pres.to_csv(os.path.join(ppath, "day1pres"))
 
 
 

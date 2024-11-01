@@ -1,11 +1,35 @@
 from psychopy import visual, core, event
 from psychopy.visual.slider import Slider
-from psychopy.hardware import keyboard
-from psychopy.core import wait
 import pathlib
-import os
-import pandas
 from psychopy.clock import Clock
+
+def present_instruction(win, ipath, delay=2):
+    windowsize = win.size
+    img = pathlib.Path(ipath).absolute().resolve()
+    image_stim = visual.ImageStim(win, image=img, size=windowsize)
+
+    clk = Clock()
+
+    image_stim.draw()
+    win.flip()
+
+    while True:
+
+        #Key decisions, if key is pressed, do ting
+
+        keys = event.waitKeys()[0]
+        print(keys, clk.getTime())
+        print(clk.getTime() > delay)
+        if 'escape' in keys or 'close' in keys:
+            core.quit()
+        try:
+            if keys == 'space' and clk.getTime() > delay:
+                break
+        except:
+            continue
+    
+
+
 
 def present_img(win, ipath, PRACMODE):
 
@@ -14,6 +38,7 @@ def present_img(win, ipath, PRACMODE):
     "ipath: path to image"
 
     "returns what patient entered disturbance level as, and reaction time"
+    
 
     #Initialize sizes
 
@@ -28,7 +53,7 @@ def present_img(win, ipath, PRACMODE):
     # Create a slider
     spos = pos=(ipos[0], windowsize[1] / -4.0)
     vas = Slider(win,
-                ticks=range(10),
+                ticks=range(1, 10),
                 labels=range(0, 10),
                 granularity=0.1,
                 color='black',
@@ -50,15 +75,6 @@ def present_img(win, ipath, PRACMODE):
         PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5)
                                    , color="black", font='arial')
         PRACMODE.draw()
-        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5 - 800)
-                                   , color="black", font='arial')
-        PRACMODE.draw()
-        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(800, ipos[1] + isize[1] / 1.5)
-                                   , color="black", font='arial')
-        PRACMODE.draw()
-        PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(800, ipos[1] + isize[1] / 1.5 - 800)
-                                   , color="black", font='arial')
-        PRACMODE.draw()
 
     c = Clock()
 
@@ -77,12 +93,13 @@ def present_img(win, ipath, PRACMODE):
         #Key decisions, if key is pressed, do ting
 
         keys = event.waitKeys()[0]
+        
         endt = c.getTime()
         if 'escape' in keys or 'close' in keys:
             core.quit()
         try:
-            keys = int(keys)
-            if keys in range(1, 10):
+            if int(keys) in range(1, 10):
+                keys = int(keys)
                 
                 vas.setMarkerPos(keys)
 
@@ -97,7 +114,17 @@ def present_img(win, ipath, PRACMODE):
                     win.flip()
                 break
         except:
-            continue
+            instructions.draw()
+            image_stim.draw()
+            vas.draw()
+            visual.TextStim(win, text="Please enter a value from 0-9", pos=(0, spos[1] - 200), color="red").draw()
+
+            if(PRACMODE):
+                PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5)
+                                , color="black", font='arial')
+                PRACMODE.draw()
+
+            win.flip()
         
     # Get the final rating
     return keys, endt - startt
