@@ -53,7 +53,7 @@ def present_img(win, ipath, PRACMODE):
     # Create a slider
     spos = pos=(ipos[0], windowsize[1] / -4.0)
     vas = Slider(win,
-                ticks=range(10),
+                ticks=range(1, 10),
                 labels=range(0, 10),
                 granularity=0.1,
                 color='black',
@@ -98,7 +98,7 @@ def present_img(win, ipath, PRACMODE):
         if 'escape' in keys or 'close' in keys:
             core.quit()
         try:
-            if int(keys) in range(0, 10):
+            if int(keys) in range(1, 10):
                 keys = int(keys)
                 
                 vas.setMarkerPos(keys)
