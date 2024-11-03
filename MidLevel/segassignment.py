@@ -1,6 +1,6 @@
 import os
 import random
-from MidLevel.segment import dirinfo, imginfo, Segment
+from MidLevel.segment import dirinfo, Segment
 from MidLevel.LowLevel.present import present_img, present_instruction
 import pandas as pd
 import datetime
@@ -53,6 +53,7 @@ def seg_assign(imgdir, m_per_seg, num_segs):
         
         for _ in range(m_per_seg):
             segs[x].add_mblock(dng.iloc[y])
+            print(dng.iloc[y])
             segs[x].add_mblock(dne.iloc[y])
             y += 1
 

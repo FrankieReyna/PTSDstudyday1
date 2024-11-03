@@ -169,4 +169,4 @@ def create_pool(sourcedir, outputdir, num_copies, sfact):
                 valdir = os.path.split(os.path.split(source)[0])[1]
                 outdir = pathlib.Path(outputdir).resolve()
                 outdir = os.path.join(outdir, valdir)
-                create_copies(source, outdir,num_copies, sfact)
+                create_copies(source, outdir, num_copies, sfact)

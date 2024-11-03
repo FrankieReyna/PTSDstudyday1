@@ -18,7 +18,7 @@ if not os.path.exists(result_export_dir):
 
 PRACMODE = False 
 
-source = "MainSource"
+source = "newLFM2_images"
 pracsource = "PracSource"
 copydir = "TransImgs"
 
@@ -32,7 +32,7 @@ copydir = Path(copydir).resolve()
 
 
 #number of images in each group (16Neg, 16Neu) = 16
-num_imgs_per_val = 4
+num_imgs_per_val = 16
 
 segfillers = 1
 
@@ -82,11 +82,8 @@ print(ppath)
 
 if not os.path.exists(ppath):
     os.mkdir(ppath)
-    print(ppath)
 
-print("pa")
 if(not PRACMODE):
-    print("ma")
     data.to_csv(os.path.join(ppath, "day1"))
     participant_pres.to_csv(os.path.join(ppath, "day1pres"))
 
