@@ -34,14 +34,14 @@ copydir = Path(copydir).resolve()
 #number of images in each group (16Neg, 16Neu) = 16
 num_imgs_per_val = 16
 
-segfillers = 4 #need 4 in the beginning of seg, 4 at the end
+segfillers = 4 #TO DO: need 4 in the beginning of seg, 4 at the end
 
-num_segs = 4
-num_copies = num_segs
+num_segs = 4 #number of segments in experiments
+num_copies = num_segs #make sure this is equal
 
 num_m_blocks = int(num_imgs_per_val / num_segs / 2)
 
-sfactor = 1.5
+sfactor = 5 #changes SkewFactor
 
 print(num_m_blocks)
 
