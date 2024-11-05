@@ -54,7 +54,7 @@ def present_img(win, ipath, PRACMODE):
     spos = pos=(ipos[0], windowsize[1] / -4.0)
     vas = Slider(win,
                 ticks=range(1, 10),
-                labels=range(0, 10),
+                labels=range(1, 10),
                 granularity=0.1,
                 color='black',
                 size=ssize, 
