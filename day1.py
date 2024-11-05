@@ -32,16 +32,16 @@ copydir = Path(copydir).resolve()
 
 
 #number of images in each group (16Neg, 16Neu) = 16
-num_imgs_per_val = 4
+num_imgs_per_val = 16
 
-segfillers = 1
+segfillers = 4 #need 4 in the beginning of seg, 4 at the end
 
 num_segs = 4
 num_copies = num_segs
 
 num_m_blocks = int(num_imgs_per_val / num_segs / 2)
 
-sfactor = 3
+sfactor = 1.5
 
 print(num_m_blocks)
 
