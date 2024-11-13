@@ -41,7 +41,7 @@ num_copies = num_segs #make sure this is equal
 
 num_m_blocks = int(num_imgs_per_val / num_segs / 2)
 
-sfactor = 5 #changes SkewFactor
+sfactor = 4 #changes SkewFactor
 
 print(num_m_blocks)
 
