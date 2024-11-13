@@ -144,7 +144,7 @@ def create_copies(path, output, num_copies, sfact):
 
     for x in range(0, num_copies):
         nname = os.path.join(file + f"{x}" + ext)
-        img = crop_vars(path, 400, 400) #changes crop of the images
+        img = crop_vars(path, 200, 200) #changes crop of the images
         skew(path, sfact).save(os.path.join(output, nname))
 
 def create_pool(sourcedir, outputdir, num_copies, sfact):
