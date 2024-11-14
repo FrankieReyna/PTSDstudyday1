@@ -20,7 +20,7 @@ def present_instruction(win, ipath, delay=2):
         keys = event.waitKeys()[0]
         print(keys, clk.getTime())
         print(clk.getTime() > delay)
-        if 'escape' in keys or 'close' in keys:
+        if 'close' in keys:
             core.quit()
         try:
             if keys == 'space' and clk.getTime() > delay:
