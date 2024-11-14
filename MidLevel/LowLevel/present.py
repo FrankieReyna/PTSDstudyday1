@@ -95,7 +95,7 @@ def present_img(win, ipath, PRACMODE):
         keys = event.waitKeys()[0]
         
         endt = c.getTime()
-        if 'escape' in keys or 'close' in keys:
+        if 'num_add' in keys:
             core.quit()
         try:
             if int(keys) in range(1, 10):
