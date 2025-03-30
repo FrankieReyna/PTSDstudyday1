@@ -85,6 +85,11 @@ def present_img(win, ipath, PRACMODE):
     vas.draw()
     val = vas.getMarkerPos()
     visual.TextStim(win, text=f"{val}", pos=(spos[0] + ssize[0] / 1.75, spos[1]), color="black", font = 'arial').draw()
+   
+    if(PRACMODE):
+                PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5)
+                                , color="black", font='arial')
+                PRACMODE.draw()
 
     win.flip()
 
@@ -95,7 +100,8 @@ def present_img(win, ipath, PRACMODE):
         keys = event.waitKeys()[0]
         
         endt = c.getTime()
-        if 'num_add' in keys:
+
+        if 'num_add' in keys or '\\' in keys:
             core.quit()
         try:
             if int(keys) in range(1, 10):
@@ -118,11 +124,6 @@ def present_img(win, ipath, PRACMODE):
             image_stim.draw()
             vas.draw()
             visual.TextStim(win, text="Please enter a value from 0-9", pos=(0, spos[1] - 200), color="red").draw()
-
-            if(PRACMODE):
-                PRACMODE = visual.TextStim(win, text="PRACMODE", pos=(-800, ipos[1] + isize[1] / 1.5)
-                                , color="black", font='arial')
-                PRACMODE.draw()
 
             win.flip()
         

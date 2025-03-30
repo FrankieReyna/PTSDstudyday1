@@ -5,70 +5,67 @@ import shutil
 import numpy
 import pathlib
 
-def crop_vars(source, mwidth, mheight):
+def create_pool(sourcedir, outputdir, num_copies, sfact):
 
-    "Randomly crops image from source based on minimum width and height"
-    "returns newly cropped image copy"
+    "This method assumes 2 things"
+    "   1: the source imgs are in a directory, within a directory"
+    "   2: These directories are seperated based on 'Neg' and 'Neu'"
 
-    #opens image
+    #deletes then creates output directory
 
-    img_path = f"{source}"
-    image = Image.open(img_path)
+    if os.path.exists(outputdir):
+        shutil.rmtree(outputdir)
 
-    #record width
+    os.mkdir(outputdir)
 
-    width, height = image.size
+    #for each image in the source directory, create copies of all images. 
 
-    #randomly determines lines from which to crop from
-
-    left = r.uniform(0, width - mwidth)
-    right = left + mwidth
-    top = r.uniform(0, height - mheight)
-    bottom = top + mheight
-
-    dim = [left, top, right, bottom]
-
-    #crop and return image
-
-    crop = image.crop(dim)
-
-    return crop.resize((width, height))
+    for root, dirs, files in os.walk(sourcedir):
+        for name in files:
+            if name != '.DS_Store':          
+                source = pathlib.Path(os.path.join(root, name)).resolve()
+                valdir = os.path.split(os.path.split(source)[0])[1]
+                outdir = pathlib.Path(outputdir).resolve()
+                outdir = os.path.join(outdir, valdir)
+                create_copies(source, outdir,num_copies, sfact)
 
 
-def temp_change(source):
+def create_copies(path, output, num_copies, sfact):
 
-    "Randomly changes tempurature of image  of path passed."
-    "returns new intensity transformed image"
+    "Using previous methods (Skew, crop) Allows for multiple variations of imgs to be made. cropping is random"
+    "skew is determined by skew factor. Takes from a source img, puts into output directiry as a dir of img vars"
+    "path: Image path to be copied"
+    "output: output directory path to store copies)"
+    "num_copies: how many copies need to be made"
+    "sfactor: skew factor for images"
 
-    #opens image
+    #Figure out name of file
 
-    img = Image.open(source)
+    tail = os.path.split(path)[1]
+    file, ext = os.path.splitext(tail)
 
-    #randomly choose color
+    #If the output doesnt exit, create it
 
-    R, b, g = [r.randint(100, 256), r.randint(100, 256), r.randint(100, 256)]
-    M = (R/255.0, 0, 0, 0,
-         0, g/255.0, 0, 0,
-         0, 0, b/255.0, 0)
+    if not os.path.exists(output):
+        os.mkdir(output)
+
+    #If we havent got a section to put copies, make one
+
+    output = os.path.join(output, file)
+    if os.path.exists(output):
+        shutil.rmtree(output)
+    os.mkdir(output)
     
-    #apply matrix to image
+    #create copies
 
-    return img.convert("RGB", M)
+    for x in range(0, num_copies):
+        nname = os.path.join(file + f"{x}" + ext)
+        img = crop_vars(path, 100, 100) #changes crop of the images
+        skew(path, sfact).save(os.path.join(output, nname))
 
-def quality(source, quality):
 
-    "Returns quality reduced image."
 
-    #funny thing with the resize feature, does not account for quality.
-    #If you resize the image to be smaller, and then put it back to its original size,
-    #It acts like youre changing the quality 
-
-    img = Image.open(source)
-    size = img.size
-    dim = ((int)(x / quality) for x in size)
-    img = img.resize(dim)
-    return img.resize(size)
-
+#I hate this method ong. Allows for skews tho
 
 def skew(source, factor):
 
@@ -112,61 +109,34 @@ def skew(source, factor):
     res = numpy.dot(numpy.linalg.inv(A.T * A) * A.T, B)
     coeffs = numpy.array(res).reshape(8)
     imgn = img.transform((width, height), Image.PERSPECTIVE, coeffs,Image.BICUBIC)
-    return imgn
+    return imgn        
 
-def create_copies(path, output, num_copies, sfact):
+def crop_vars(source, mwidth, mheight):
 
-    "Using previous methods (Skew, crop) Allows for multiple variations of imgs to be made. cropping is random"
-    "skew is determined by skew factor. Takes from a source img, puts into output directiry as a dir of img vars"
-    "path: Image path to be copied"
-    "output: output directory path to store copies)"
-    "num_copies: how many copies need to be made"
-    "sfactor: skew factor for images"
+    "Randomly crops image from source based on minimum width and height"
+    "returns newly cropped image copy"
 
-    #Figure out name of file
+    #opens image
 
-    tail = os.path.split(path)[1]
-    file, ext = os.path.splitext(tail)
+    img_path = f"{source}"
+    image = Image.open(img_path)
 
-    #If the output doesnt exit, create it
+    #record width
 
-    if not os.path.exists(output):
-        os.mkdir(output)
+    width, height = image.size
 
-    #If we havent got a section to put copies, make one
+    #randomly determines lines from which to crop from
 
-    output = os.path.join(output, file)
-    if os.path.exists(output):
-        shutil.rmtree(output)
-    os.mkdir(output)
-    
-    #create copies
+    left = r.uniform(0, width - mwidth)
+    right = left + mwidth
+    top = r.uniform(0, height - mheight)
+    bottom = top + mheight
 
-    for x in range(0, num_copies):
-        nname = os.path.join(file + f"{x}" + ext)
-        img = crop_vars(path, 100, 100) #changes crop of the images
-        skew(path, sfact).save(os.path.join(output, nname))
+    dim = [left, top, right, bottom]
 
-def create_pool(sourcedir, outputdir, num_copies, sfact):
+    #crop and return image
 
-    "This method assumes 2 things"
-    "   1: the source imgs are in a directory, within a directory"
-    "   2: These directories are seperated based on 'Neg' and 'Neu'"
+    crop = image.crop(dim)
 
-    #deletes then creates output directory
+    return crop.resize((width, height))
 
-    if os.path.exists(outputdir):
-        shutil.rmtree(outputdir)
-
-    os.mkdir(outputdir)
-
-    #for each image in the source directory, create copies of all images. 
-
-    for root, dirs, files in os.walk(sourcedir):
-        for name in files:
-            if name != '.DS_Store':          
-                source = pathlib.Path(os.path.join(root, name)).resolve()
-                valdir = os.path.split(os.path.split(source)[0])[1]
-                outdir = pathlib.Path(outputdir).resolve()
-                outdir = os.path.join(outdir, valdir)
-                create_copies(source, outdir,num_copies, sfact)
