@@ -31,7 +31,7 @@ At this point, you should have everything above installed. Make sure to create a
 
 <git clone (url)>
 
-replace the url with [Day1](https://github.com/FrankieReyna/PTSDstudyday1) and [Day2](https://github.com/FrankieReyna/PTSDstudyday2) links.
+replace the url with [Day1](https://github.com/FrankieReyna/PTSDstudyday1) and [Day2](https://github.com/FrankieReyna/PTSDstudyday2) links (run each seperately in the same directory).
 
 cd into the day1 directory, run the following command
 

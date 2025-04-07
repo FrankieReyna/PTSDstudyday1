@@ -1,6 +1,6 @@
 import os
 import random
-from MidLevel.segment import dirinfo, imginfo, Segment
+from MidLevel.segment import dirinfo, Segment
 from MidLevel.LowLevel.present import present_img, present_instruction
 import pandas as pd
 import datetime
@@ -24,7 +24,6 @@ def pres_assign(imgdir):
             mOs =  "spaced" if x % 2 == 0 else "mass"
             x += 1
             df = pd.concat([df, pd.DataFrame(data=[dirinfo(img, val, mOs, os.path.join(valpath, img))])], ignore_index=True) #you actually do need to include the path
-    print(df)
         
     return(df)
 
@@ -44,7 +43,8 @@ def seg_assign(imgdir, m_per_seg, num_segs):
         segs.append(Segment(numvars))
         
     dng = df.loc[(df['val'] == "Negative") & (df['pres'] == 'mass')]
-    dne = df.loc[(df['val'] == "Neutral") & (df['pres'] == 'mass')]
+    dng = dng.reset_index(drop=True)
+    dne = df.loc[(df['val'] == "Neutral") & (df['pres'] == 'mass')].reset_index(drop=True)
         
     #runs through each segment, give each segment number of massed and spaced blocks needed
 
@@ -54,7 +54,10 @@ def seg_assign(imgdir, m_per_seg, num_segs):
         for _ in range(m_per_seg):
             segs[x].add_mblock(dng.iloc[y])
             segs[x].add_mblock(dne.iloc[y])
+            print(dng.iloc[y])
+            print(dne.iloc[y])
             y += 1
+
 
     dng = df.loc[(df['val'] == "Negative") & (df['pres'] == 'spaced')]
     dne = df.loc[(df['val'] == "Neutral") & (df['pres'] == 'spaced')]
@@ -96,7 +99,7 @@ def present_segs(win, segs, segfills, partnum, PRACMODE, BREAK=False, SEGSPERBRE
                 idx = random.randint(0, len(block) - 1)
                 img = block[idx]
                 score, rt = present_img(win, img.path, PRACMODE)
-                df = pd.concat([df, pd.DataFrame({"partinum" : partnum, "orgimg" : img.dirname, "imgname" : img.name, "valScore" : score
+                df = pd.concat([df, pd.DataFrame({"participant" : partnum, "img" : img.name.replace(".jpg", ""), "valRating" : score
                                                   ,"resptime" : rt, "val" : img.val, "pres" : img.pres, "path" : img.path, "date" : datetime.datetime.now()}, index = [0])], ignore_index=True)
                 del block[idx]
 
@@ -107,7 +110,7 @@ def present_fillers(win, df, num_pres, start, partnum, PRACMODE):
         print(img)
         path =  os.path.join("fillers", img)
         score, rt = present_img(win, path, PRACMODE)
-        df = pd.concat([df, pd.DataFrame({"partinum" : partnum, "orgimg" : "N/A", "imgname" : img, "valScore" : score
+        df = pd.concat([df, pd.DataFrame({"participant" : partnum, "img" : img.replace(".jpg", ""), "valRating" : score
                                     ,"resptime" : rt, "val" : "fill", "pres" : "fill", "path" : path, "date" : datetime.datetime.now()}, index = [0])], ignore_index=True)
     return df
 

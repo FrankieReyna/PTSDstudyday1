@@ -8,8 +8,6 @@ import psychopy.gui as psygui
 
 PRACMODE = False #Prac mode does not save data, good for not mudding everything up
 
-
-
 "HERE WE ARE GOING TO DICTATE WHERE OUR RESULTS GO, WHERE TO GET/PUT IMAGES, AND THE PARAMETERS OF OUR EXPR"
 result_export_dir = Path(r"results").resolve()
 #Initialize what Directories used for image storage/presentation
@@ -78,7 +76,3 @@ if not os.path.exists(ppath):
 if(not PRACMODE):
     data.to_csv(os.path.join(ppath, "day1"))
     participant_pres.to_csv(os.path.join(ppath, "day1pres"))
-
-
-
-
