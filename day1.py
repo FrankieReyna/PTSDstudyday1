@@ -68,7 +68,6 @@ present_instruction(win, r'Ver2__PTSD_pilot_text\prac2.jpg')
 data = exp.present_segs(win, segs, segfillers, partnum, PRACMODE, BREAK=True, SEGSPERBREAK=1, BREAKSLIDEPATH=r'Ver2__PTSD_pilot_text\break.jpg')
 present_instruction(win, r'Ver2__PTSD_pilot_text\expend.jpg')
 ppath = os.path.join(result_export_dir, f"P{partnum}")
-print(ppath)
 
 if not os.path.exists(ppath):
     os.mkdir(ppath)

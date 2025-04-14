@@ -54,8 +54,6 @@ def seg_assign(imgdir, m_per_seg, num_segs):
         for _ in range(m_per_seg):
             segs[x].add_mblock(dng.iloc[y])
             segs[x].add_mblock(dne.iloc[y])
-            print(dng.iloc[y])
-            print(dne.iloc[y])
             y += 1
 
 
@@ -99,8 +97,8 @@ def present_segs(win, segs, segfills, partnum, PRACMODE, BREAK=False, SEGSPERBRE
                 idx = random.randint(0, len(block) - 1)
                 img = block[idx]
                 score, rt = present_img(win, img.path, PRACMODE)
-                df = pd.concat([df, pd.DataFrame({"participant" : partnum, "img" : img.name.replace(".jpg", ""), "valRating" : score
-                                                  ,"resptime" : rt, "val" : img.val, "pres" : img.pres, "path" : img.path, "date" : datetime.datetime.now()}, index = [0])], ignore_index=True)
+                df = pd.concat([df, pd.DataFrame({"participant" : partnum, "img" : img.imgname, "valRating" : score
+                                                  ,"resptime" : rt, "val" : img.val, "pres" : img.pres, "date" : datetime.datetime.now()}, index = [0])], ignore_index=True)
                 del block[idx]
 
     return df
@@ -111,6 +109,6 @@ def present_fillers(win, df, num_pres, start, partnum, PRACMODE):
         path =  os.path.join("fillers", img)
         score, rt = present_img(win, path, PRACMODE)
         df = pd.concat([df, pd.DataFrame({"participant" : partnum, "img" : img.replace(".jpg", ""), "valRating" : score
-                                    ,"resptime" : rt, "val" : "fill", "pres" : "fill", "path" : path, "date" : datetime.datetime.now()}, index = [0])], ignore_index=True)
+                                    ,"resptime" : rt, "val" : "NA", "pres" : "fill", "date" : datetime.datetime.now()}, index = [0])], ignore_index=True)
     return df
 
